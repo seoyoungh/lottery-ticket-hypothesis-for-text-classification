@@ -10,9 +10,10 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 
 다른 연구인 ``PLAYING THE LOTTERY WITH REWARDS AND MULTIPLE LANGUAGES: LOTTERY TICKETS IN RL AND NLP``에서 NLP task에 해당 가설을 적용할 수 있다는 가능성을 보였다. 이 연구에서는 `` language modeling`` task에 ``LSTM``을, ``machine translation`` task에는 ``transformer``를 사용해 두 모델에서 lottery ticket hypothesis를 검증했다.
 
-하지만 아직 해당 가설을 NLP 분야의 다양한 신경망 모델, 다양한 task에 범용적으로 적용할 수 있는지는 아직 불분명하다. 따라서, lottery ticket 기법의 NLP 분야에 대한 범용성을 확인하기 위해 연구를 진행하게 되었다.
+하지만 아직 NLP 분야에서 주로 사용되는 신경망 모델, 다양한 task에 해당 가설을 범용적으로 적용할 수 있는지는 아직 불분명하다. 따라서, lottery ticket 기법의 NLP 분야에 대한 범용성을 확인하기 위해 연구를 진행하게 되었다.
 
-### Needs - Network pruning in NLP
+### Needs
+#### Model Compression in NLP
 모델 경량화 기법은 CNN 모델을 주로 쓰는 computer vision과 같은 분야에서 연구가 진행되어 왔다. RNN 계열의 모델을 주로 사용하는 NLP 분야에서는 그 필요성이 매우 강조되지는 않았었다. RNN은 다음 입력 데이터 처리를 위해 이전 데이터가 필요하여 병렬화가 어렵다는 한계점 때문에 모델을 거대화하기 어려웠기 때문이다. 하지만, Google이 ``BERT``를 출시한 후 NLP 분야에서도 거대한 모델들이 등장하기 시작했다. 모델의 사전 학습&재학습이 가능해졌고, 뛰어난 성능을 보여주었다. 또한 큰 배치 사이즈가 학습에 효과적이라는 의견이 나오면서 사전 학습에 사용되는 배치 크기가 점점 커지는 추세를 보이고 있다.
 
 메모리 부담을 줄이고, 학습 소요 시간을 줄이고, 모바일/embedded 환경에 배치하기 위해서는 parameters를 줄이는 모델 경량화가 필수적이다. NLP 분야에서도 모델 경량화 연구가 더욱 활발히 진행되어야 한다.
@@ -31,40 +32,70 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 ### Models
 ``CNN``, ``RNN``, ``LSTM``, ``BERT``
 
-### Task and Datasets
-**: Text classification (Sentiment Analysis)**
+### Task
+#### : Text classification (Sentiment Analysis)
 
-#### task 1) Binary-class text classification
-##### dataset
-[Amazon Reviews](https://www.kaggle.com/bittlingmayer/amazonreviews)  
-[IMDb Movie Reviews](http://ai.stanford.edu/~amaas/data/sentiment/)
+##### task 1) Binary-class text classification
+* dataset: IMDb Large Movie Review Dataset, ~~Yelp Review Polarity~~
 
-#### task 2) Multi-class text classification
-##### dataset
-[Yelp-5](https://www.yelp.com/dataset)
+##### task 2) Multi-class text classification
+* dataset: ~~DBPedia~~, Yelp Review Full
+
+### Datasets
+| Dataset | Classes | Train samples | Test samples |
+|---------|---------|---------------|--------------|
+| IMDb Large Movie Review Dataset | 2 | 250,000 | 250,000 |
+| Yelp Review Full | 5 | 650,000 | 50,000 |
+| ~~Yelp Review Polarity~~ | 2 | 560,000 | 38,000 |
+| ~~DBPedia~~ | 14 | 560,000 | 70,000 |
+
+
+[IMDb Dataset source](https://www.kaggle.com/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews)  
+[Other Datasets source](https://course.fast.ai/datasets)
 
 ## Schedule
 
-### Plan
+### Timeline
 * **March**
   - 연구 주제 research ⭕️
   - References 찾기 ⭕️
 
 * **April**
   - 연구 task, model, dataset 선정 ⭕️
-  - task1: pruning 진행 전까지 모델 구축 후 성능 평가  🔜
-  - task2: pruning 진행 전까지 모델 구축 후 성능 평가  🔜
+  - training - ``CNN``, ``RNN``, ``LSTM``
+    - task1 ``IMDb`` ⭕️
+    - task2 ``Yelp-5`` 🔜
+  - random pruning - ``CNN``, ``RNN``, ``LSTM``
+    - task1 ``IMDb`` 🔜
+    - task2 ``Yelp-5`` 🔜
 
 * **May**
-  - task1: random initialization pruning
-  - task1: lottery ticket initialization pruning
-  - task2: random initialization pruning
-  - task2: lottery ticket initialization pruning
-  - 성능 비교
+  - lottery ticket pruning - ``CNN``, ``RNN``, ``LSTM``
+    - task1 ``IMDb``
+    - task2``Yelp-5``
+  - working on ``BERT``
+    - training
+      - task1
+      - task2
+    - random pruning
+      - task1
+      - task2
+    - lottery ticket
+      - task1
+      - task2
+  - 각 case별 성능 비교
+  - Performace 개선
+    - 처음 training할 때 줄 수 있는 better condition 고려
+    - hyperparameters 바꾸어보기
+    - 더 효과적인 pruning 방법 research (especailly LSTM, BERT)
+  - Consider to work with the other two datasets
 
 * **June**
-  - 모델 보완
-  - Github 배포
+  - ``Conclusion``
+      - 최종 setting 채택
+      - 최종 성능 도출
+  - ``Code Encapsulation/Generalisation``
+  - ``Github Deployment``
   - 결과 보고서 작성
 
 ### Progress Report
@@ -94,6 +125,7 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 * [Multiclass Sentiment Prediction using Yelp Business Reviews](https://www.semanticscholar.org/paper/Multiclass-Sentiment-Prediction-using-Yelp-Business-Yu/dfa617c7c7e3a53d90c092cef09b2ee1614317a2)
 
 ### Posts
+* [PyTorch Offical Libary - torchtext](https://pytorch.org/text/index.html)
 * [Multi-label Text Classification using BERT](https://medium.com/huggingface/multi-label-text-classification-using-bert-the-mighty-transformer-69714fa3fb3d)
 * [Multiclass Text Classification using LSTM in Pytorch](https://towardsdatascience.com/multiclass-text-classification-using-lstm-in-pytorch-eac56baed8df)
 * [Compressing and regularizing deep neural networks](https://www.oreilly.com/content/compressing-and-regularizing-deep-neural-networks/)

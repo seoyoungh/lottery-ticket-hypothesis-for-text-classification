@@ -39,14 +39,14 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 * dataset: IMDb Large Movie Review Dataset, ~~Yelp Review Polarity~~
 
 ##### task 2) Multi-class text classification
-* dataset: ~~DBPedia~~, Yelp Review Full
+* dataset: AG News, ~~DBPedia~~
 
 ### Datasets
 | Dataset | Classes | Train samples | Test samples |
 |---------|---------|---------------|--------------|
+| AG News | 4 | 120,000 | 7,600 |
 | IMDb Large Movie Review Dataset | 2 | 250,000 | 250,000 |
-| Yelp Review Full | 5 | 650,000 | 50,000 |
-| ~~Yelp Review Polarity~~ | 2 | 560,000 | 38,000 |
+| Yelp Review Polarity | 2 | 560,000 | 38,000 |
 | ~~DBPedia~~ | 14 | 560,000 | 70,000 |
 
 
@@ -105,7 +105,7 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 | | [Week8](/assets/progress/week8.md) | [Week12](/assets/progress/week12.md) |
 | | [Week9](/assets/progress/week9.md) | [Week13](/assets/progress/week13.md) |
 | [Week6](/assets/progress/week6.md) | [Week10](/assets/progress/week10.md) | [Week14](/assets/progress/week14.md) |
-| [Week7](/assets/progress/week7.md) | [Week11](/assets/progress/week11.md) | [Week15](/assets/progress/week15.md) |
+| [Week7 (중간 보고)](/assets/progress/week7.md) | [Week11](/assets/progress/week11.md) | [Week15](/assets/progress/week15.md) |
 
 ## References
 ### Lottery Ticket Hypothesis

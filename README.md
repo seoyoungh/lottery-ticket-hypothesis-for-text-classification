@@ -30,7 +30,7 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 3) ``winning ticket initialization``으로 pruning을 진행한 후 성능을 비교한다.
 
 ### Models
-``CNN``, ``RNN``, ``LSTM``, ``BERT``
+``CNN``, ``LSTM``, ``BERT``
 
 ### Task
 #### : Text classification (Sentiment Analysis)
@@ -45,8 +45,8 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 | Dataset | Classes | Train samples | Test samples |
 |---------|---------|---------------|--------------|
 | AG News | 4 | 120,000 | 7,600 |
-| IMDb Large Movie Review Dataset | 2 | 250,000 | 250,000 |
-| Yelp Review Polarity | 2 | 560,000 | 38,000 |
+| IMDb Large Movie Review Dataset | 2 | 40,000 | 10,000 |
+| ~~Yelp Review Polarity~~ | 2 | 560,000 | 38,000 |
 | ~~DBPedia~~ | 14 | 560,000 | 70,000 |
 
 
@@ -56,46 +56,39 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 ## Schedule
 
 ### Timeline
-* **March**
+
   - 연구 주제 research ⭕️
   - References 찾기 ⭕️
-
-* **April**
   - 연구 task, model, dataset 선정 ⭕️
-  - training - ``CNN``, ``RNN``, ``LSTM``
-    - task1 ``IMDb`` ⭕️
-    - task2 ``Yelp-5`` 🔜
-  - random pruning - ``CNN``, ``RNN``, ``LSTM``
-    - task1 ``IMDb`` 🔜
-    - task2 ``Yelp-5`` 🔜
+  - load datasets and pre-trained embedding (Glove-100d) ⭕️
+  - model implement - ``CNN``, ``LSTM`` ⭕️
 
 * **May**
-  - lottery ticket pruning - ``CNN``, ``RNN``, ``LSTM``
-    - task1 ``IMDb``
-    - task2``Yelp-5``
-  - working on ``BERT``
-    - training
-      - task1
-      - task2
+  - ``CNN``, ``LSTM``
+    - training ⭕️
+      - task1 ``IMDb`` ⭕️
+      - task2 ``AG-News`` ⭕️
     - random pruning
-      - task1
-      - task2
-    - lottery ticket
-      - task1
-      - task2
+    - lt pruning
+  - ``BERT``
+    - model implement
+    - training
+      - task1 ``IMDb``
+      - task2 ``AG-News``
+    - random pruning
+    - lt pruning
   - 각 case별 성능 비교
   - Performace 개선
     - 처음 training할 때 줄 수 있는 better condition 고려
-    - hyperparameters 바꾸어보기
-    - 더 효과적인 pruning 방법 research (especailly LSTM, BERT)
+      - hyperparameters 바꾸어보기
+    - try ``late rewinding``
   - Consider to work with the other two datasets
 
 * **June**
   - ``Conclusion``
       - 최종 setting 채택
       - 최종 성능 도출
-  - ``Code Encapsulation/Generalisation``
-  - ``Github Deployment``
+  - (코드 모듈화, Github Deployment)
   - 결과 보고서 작성
 
 ### Progress Report

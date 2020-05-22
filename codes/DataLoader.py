@@ -1,4 +1,5 @@
 import torch
+import torchtext
 from torchtext import data
 from torchtext import datasets
 from torchtext.vocab import GloVe
@@ -7,6 +8,7 @@ from torch.autograd import Variable
 import torch.optim as optim
 import numpy as np
 import random
+import spacy
 
 SEED = 1234 # random seed for reproductivity
 
@@ -31,7 +33,7 @@ class IMDB_CNN:
         MAX_VOCAB_SIZE = 25_000
         self.TEXT.build_vocab(self.train,
                  max_size = MAX_VOCAB_SIZE,
-                 vectors = "glove.6B.100d",
+                 vectors = torchtext.vocab.Vectors("../glove.6B.100d.txt"),
                  unk_init = torch.Tensor.normal_)
 
         self.LABEL.build_vocab(self.train)
@@ -62,7 +64,7 @@ class IMDB_LSTM:
         MAX_VOCAB_SIZE = 25_000
         self.TEXT.build_vocab(self.train,
                  max_size = MAX_VOCAB_SIZE,
-                 vectors = "glove.6B.100d",
+                 vectors = torchtext.vocab.Vectors("../glove.6B.100d.txt"),
                  unk_init = torch.Tensor.normal_)
 
         self.LABEL.build_vocab(self.train)
@@ -93,7 +95,7 @@ class AGNEWS:
         MAX_VOCAB_SIZE = 25_000
         self.TEXT.build_vocab(self.train,
                  max_size = MAX_VOCAB_SIZE,
-                 vectors = "glove.6B.100d",
+                 vectors = torchtext.vocab.Vectors("../glove.6B.100d.txt"),
                  unk_init = torch.Tensor.normal_)
 
         self.LABEL.build_vocab(self.train)

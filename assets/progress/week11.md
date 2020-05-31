@@ -10,7 +10,7 @@ CNN 을 Image recognition이 아닌 NLP task (Text Classification task)에 배�
 
 CNN이 아닌 LSTM에도 LT를 적용할 수 있는지
 
-![plot2](/assets/images/plot2_i133gyzhl.png)
+![plot2](/assets/images/plot2.png)
 
 -	IMDB, Epoch = 5로 설정해 간이 training 진행해봄 (학교 GPU 오류 때문)
 -	오히려 CNN을 적용했을 때보다 훨씬 압도적으로 lt가 성능이 좋았음

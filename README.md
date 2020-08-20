@@ -2,9 +2,6 @@
 
 This study is being conducted in ``Software Convergence Capstone Design - Spring 2020`` class.
 
-## Researcher
-* [Seoyoung Hong](https://github.com/seoyoungh) from Kyunghee Univ.
-
 ## Overview
 ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks`` 연구는 network pruning 분야에서 주목을 받았다. 처음 weight initialization에서 사용된 초기 weight를 저장해, 이후 subnetwork의 weight로 다시 넣어주는 간단한 방법이지만 그 성능은 뛰어났다. 하지만, 해당 연구는 ``image classification`` task에 ``CNN``을 적용하는 경우에 대해서만 성능을 검증했다.
 
@@ -26,103 +23,82 @@ ICLR 2019 best paper로 선정된 ​``The Lottery Ticket Hypothesis: Finding Sp
 
 ## Methods
 1) 각 model에 dataset을 학습시킨 후, 모델의 성능을 평가한다.  
-2) ``random initialization``으로 pruning을 진행한 후 성능을 비교한다.  
-3) ``winning ticket initialization``으로 pruning을 진행한 후 성능을 비교한다.
+2) **Random initialization**으로 pruning을 진행한 후 full network와 성능을 비교한다.  
+3) **Winning ticket initialization**으로 pruning을 진행한 후 full network와 성능을 비교한다.
+   - Does winning ticket reach the same or higher test accuracy from the full network?
 
 ### Models
-``CNN``, ``LSTM``, ``BERT``
+``CNN``, ``LSTM``
 
 ### Task
-#### : Text classification (Sentiment Analysis)
-
-##### task 1) Binary-class text classification
-* dataset: IMDb Large Movie Review Dataset, ~~Yelp Review Polarity~~
-
-##### task 2) Multi-class text classification
-* dataset: AG News, ~~DBPedia~~
+* **Binary-class text classification**
+  - dataset: IMDb Polarity
+* **Multi-class text classification**
+  - dataset: AG News
+* Can **'Late Rewinding'** improve the performance?
 
 ### Datasets
 | Dataset | Classes | Train samples | Test samples |
 |---------|---------|---------------|--------------|
-| AG News | 4 | 120,000 | 7,600 |
 | IMDb Large Movie Review Dataset | 2 | 40,000 | 10,000 |
-| ~~Yelp Review Polarity~~ | 2 | 560,000 | 38,000 |
-| ~~DBPedia~~ | 14 | 560,000 | 70,000 |
-
+| AG News | 4 | 120,000 | 7,600 |
 
 [IMDb Dataset source](https://www.kaggle.com/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews)  
-[Other Datasets source](https://course.fast.ai/datasets)
+[AG News Datasets source](https://course.fast.ai/datasets)
 
-## Schedule
+### Settings
+* Training Settings
+  - Bias는 0으로 초기화
+  - Xavier Initializer 사용
+     - LSTM의 weight_hh는 Orthogonal Initializer 사용
+  - Adam Optimizer 사용
+  - Learning rate: 5e-3 (IMDb), 1e-3 (AG-news)
+  - Embedding: Custom (CNN), Glove.6B.100d (LSTM)
+  - EPOCH = 10
+      - IMDb + CNN은 EPOCH = 20, early stopping, best valid loss가 나온 model state 에서 test accuracy 구함
 
-### Timeline
+* Pruning Settings
+  - Local Pruning
+  - 한 번에 20%씩 20회 pruning 수행
+  - weight, bias, embedding 모두 pruning
 
-  - 연구 주제 research ⭕️
-  - References 찾기 ⭕️
-  - 연구 task, model, dataset 선정 ⭕️
-  - load datasets and pre-trained embedding (Glove-100d) ⭕️
-  - model implement - ``CNN``, ``LSTM`` ⭕️
+## Results
+[Figures](/results.pdf)
 
-* **May**
-  - ``CNN``, ``LSTM``
-    - training ⭕️
-      - task1 ``IMDb`` ⭕️
-      - task2 ``AG-News`` ⭕️
-    - random pruning
-    - lt pruning
-  - ``BERT``
-    - model implement
-    - training
-      - task1 ``IMDb``
-      - task2 ``AG-News``
-    - random pruning
-    - lt pruning
-  - 각 case별 성능 비교
-  - Performace 개선
-    - 처음 training할 때 줄 수 있는 better condition 고려
-      - hyperparameters 바꾸어보기
-    - try ``late rewinding``
-  - Consider to work with the other two datasets
+### Without Late Rewinding
+|  | Full model performance | Winning ticket performance | Sparsity |
+|---------|---------|---------------|--------------|
+| **IMDb + CNN** | 87.04 | 87.55 | 36% |
+| **AG-news + CNN** | 89.18 | 89.56 | 89.3% |
+| **IMDb + LSTM** | 90.60 | 90.24 | 86.6% |
+| **AG-news + LSTM** | 91.75 | 91.89 | 48.8% |
 
-* **June**
-  - ``Conclusion``
-      - 최종 setting 채택
-      - 최종 성능 도출
-  - (코드 모듈화, Github Deployment)
-  - 결과 보고서 작성
+### With Late Rewinding
+|  | Full model performance | Winning ticket performance | Sparsity |
+|---------|---------|---------------|--------------|
+| **IMDb + CNN** | 87.04 | 87.64 | 48.8% |
+| **AG-news + CNN** | 89.88 | 89.82 | 89.3% |
+| **IMDb + LSTM** | 89.96 | 90.49 | 86.6% |
+| **AG-news + LSTM** | 91.55 | 92.36 | 73.8% |
 
-### Progress Report
+## Conclusion
+* Lottery Ticket Hypothesis를 CNN은 물론 LSTM에도 적용할 수 있었다.
+* Image Recognition task가 아닌 Text Classification task에도 적용이 가능했고, 이를 통해 task에 대한 범용성을 확인할 수 있었다.
+* 일반적인 딥러닝 모델은 Over-parameterization화 되어 있을 수 있다.
+* 오히려 pruning을 일정 수준 진행해 불필요한 가중치를 없애어 더 좋은 성능 (higher test accuracy)을 내는 model을 찾을 수 있다.
+  * 이 때 winning ticket의 sparsity는 dataset / model에 따라 다르다.
+* Pruning 후 적절한 sparsity에서 winning ticket을 찾을 수 있다.
+* Pruning 과정에서, 초기 initialization에 사용된 weight를 로드해 initialization에 사용하면 더 좋은 성능을 낸다.
+* Pruning이 약 90% 이상 진행되면 initialization 방법에 상관 없이 성능이 떨어진다.
 
-| April |  May  | June  |
-|-------|-------|-------|
-| | [Week8](/assets/progress/week8.md) | [Week12](/assets/progress/week12.md) |
-| | [Week9](/assets/progress/week9.md) | [Week13](/assets/progress/week13.md) |
-| [Week6](/assets/progress/week6.md) | [Week10](/assets/progress/week10.md) | [Week14](/assets/progress/week14.md) |
-| [Week7 (중간 보고)](/assets/progress/week7.md) | [Week11](/assets/progress/week11.md) | [Week15](/assets/progress/week15.md) |
+## 진행 중인 후속 연구
+* The Lottery Hypothesis in Transfer Learning
+  - 찾은 winning ticket이 동일한 task, 다른 dataset에 대해 얼만큼의 성능을 내는지
 
 ## References
-### Lottery Ticket Hypothesis
-* [The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks](https://arxiv.org/abs/1803.03635) ``The Main Paper``
+* [The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks](https://arxiv.org/abs/1803.03635)
 * [PLAYING THE LOTTERY WITH REWARDS AND MULTIPLE LANGUAGES: LOTTERY TICKETS IN RL AND NLP](https://arxiv.org/abs/1906.02768)
-* [Evaluating Lottery Tickets Under Distributional Shifts](https://arxiv.org/abs/1910.12708)
-* [Finding Winning Tickets with Limited (or No) Supervision](https://openreview.net/forum?id=SJx_QJHYDB)
+* [Stabilizing the Lottery Ticket Hypothesis](https://arxiv.org/abs/1903.01611v3)
 
-### Pruning
-* [Rethinking the Value of Network Pruning](https://arxiv.org/abs/1810.05270)
-* [Exploring Sparsity in Recurrent Neural Networks](https://arxiv.org/abs/1704.05119)
-* [COMPARING REWINDING AND FINE-TUNING IN NEURAL NETWORK PRUNING](https://arxiv.org/abs/2003.02389)
-* [C-LSTM: Enabling Efficient LSTM using Structured Compression Techniques on FPGAs](https://arxiv.org/abs/1803.06305)
-* [COMPRESSING BERT: STUDYING THE EFFECTS OF WEIGHT PRUNING ON TRANSFER LEARNING](https://arxiv.org/abs/2002.08307)
-
-### Sentiment Analysis
-* [Multiclass Sentiment Prediction using Yelp Business Reviews](https://www.semanticscholar.org/paper/Multiclass-Sentiment-Prediction-using-Yelp-Business-Yu/dfa617c7c7e3a53d90c092cef09b2ee1614317a2)
-
-### Posts
-* [PyTorch Offical Libary - torchtext](https://pytorch.org/text/index.html)
-* [Multi-label Text Classification using BERT](https://medium.com/huggingface/multi-label-text-classification-using-bert-the-mighty-transformer-69714fa3fb3d)
-* [Multiclass Text Classification using LSTM in Pytorch](https://towardsdatascience.com/multiclass-text-classification-using-lstm-in-pytorch-eac56baed8df)
-* [Compressing and regularizing deep neural networks](https://www.oreilly.com/content/compressing-and-regularizing-deep-neural-networks/)
-* [딥러닝 모델 압축 방법론과 BERT 압축](https://blog.est.ai/2020/03/딥러닝-모델-압축-방법론과-bert-압축/)
-* [torch.nn.utils.prune 모듈로 BERT 다이어트 시키기](https://huffon.github.io/2020/03/15/torch-pruning/)
-
-## License
+## Researcher
+* [Seoyoung Hong](https://github.com/seoyoungh) from Kyunghee Univ.
